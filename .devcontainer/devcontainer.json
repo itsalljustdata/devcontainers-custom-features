@@ -1,25 +1,25 @@
 {
-  "name": "devcontainer-features",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "remoteUser": "vscode",
-  "features": {
-    "ghcr.io/devcontainers/features/powershell:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers-contrib/features/devcontainers-cli:1": {},
-    "ghcr.io/trunk-io/devcontainer-feature/trunk": "latest",
-  },
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
   "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-vscode.powershell",
-        "streetsidesoftware.code-spell-checker",
-        "trunk.io",
-        "KnisterPeter.vscode-commitizen",
-      ],
-    },
+      "vscode": {
+          "settings": {
+              "json.schemas": [
+                  {
+                      "fileMatch": [
+                          "*/devcontainer-feature.json"
+                      ],
+                      "url": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainerFeature.schema.json"
+                  }
+              ]
+          },
+          "extensions": [
+              "mads-hartmann.bash-ide-vscode"
+          ]
+      }
   },
-  "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
-  ],
-  "updateContentCommand": "trunk install && trunk git-hooks sync",
+  "features": {
+      "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "remoteUser": "node",
+  "updateContentCommand": "npm install -g @devcontainers/cli"
 }

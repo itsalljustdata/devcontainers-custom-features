@@ -40,7 +40,35 @@ source dev-container-features-test-lib
 # Feature-specific tests
 # The 'check' command comes from the dev-container-features-test-lib. Syntax is...
 # check <LABEL> <cmd> [args...]
-check "execute command" bash -c "python-virtualenv | grep 'requests'"
+
+check "this File" echo "$0"
+
+check "venv location" echo "VENVLOCATION : $VENVLOCATION"
+
+if [ "$VENVLOCATION" == "$VENVLOCATION" ]; then
+    echo -e "(!) No VirtualEnv location specified."
+    VENVLOCATION=$(find / -type d -name ".venv" 2>/dev/null | head -n 1)
+fi
+
+
+if [ "$VENVLOCATION" == "" ]; then
+    echo -e "(!) No VirtualEnv location specified."
+else
+    check "venv location" echo "VENVLOCATION : $VENVLOCATION"
+
+    check "python" which python3
+    check "python is available" python3 --version
+
+    check "activate venv" source ${VENVLOCATION}/bin/activate
+    check "VIRTUAL_ENV" echo $VIRTUAL_ENV
+
+    check "python" which python3
+    check "python is available" python3 --version
+
+    check "pip list" pip list
+
+fi
+
 
 # Report results
 # If any of the checks above exited with a non-zero exit code, the test will fail.

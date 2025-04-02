@@ -1,22 +1,30 @@
-#!/bin/bash -i
+#!/bin/bash
 set -ex
 
-VENVLOCATION=${VENVLOCATION:-"~/.venv"}
-REQUIREMENTSFILE=${REQUIREMENTSFILE:-""}
-VENVPROMPT=${VENVPROMPT:-""}
-INCLUDESETUPTOOLS=${INCLUDESETUPTOOLS:-"False"}
+DEFAULT_VENVLOCATION=$(realpath "$PWD/.venv")
 
+# VENVLOCATION=${VENVLOCATION:-$DEFAULT_VENVLOCATION}
+# REQUIREMENTSFILE=${REQUIREMENTSFILE:-""}
+# VENVPROMPT=${VENVPROMPT:-""}
+# INCLUDESETUPTOOLS=${INCLUDESETUPTOOLS:-"False"}
 
-if [ "$(id -u)" -ne 0 ]; then
-  echo -e 'Script must be run as
-    root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
-  exit 1
-elif [ -z "$VENVLOCATION" ]; then
+if [ "$VENVLOCATION" == "" ]; then
+  VENVLOCATION="$DEFAULT_VENVLOCATION"
   echo -e "(!) No VirtualEnv location specified."
-  exit 1
-elif [ -z "$REQUIREMENTSFILE" ]; then
-  echo -e "(!) No requirements file specified."
-  exit 1
+  echo -e "(i) Using default location $VENVLOCATION."
+fi
+
+parentdir=$(dirname "$VENVLOCATION")
+echo -e "(i) Parent directory is $parentdir."
+
+
+
+VENVLOCATION=$(realpath "$VENVLOCATION")
+
+pip install --upgrade pip
+
+if [ "$REQUIREMENTSFILE" == "" ]; then
+  echo -e "(!) No requirements file specified. Continuing without it."
 elif [ ! -f "$REQUIREMENTSFILE" ]; then
   echo -e "(!) Requirements file $REQUIREMENTSFILE not found."
   exit 1
@@ -28,7 +36,6 @@ if [ -d "$VENVLOCATION" ]; then
   echo -e "(i) Deleted $VENVLOCATION."
 fi
 
-parentdir=$(dirname "$VENVLOCATION")
 if [ ! -d "$parentdir" ]; then
   echo -e "(i) Creating parent directory $parentdir."
   mkdir -p "$parentdir"
@@ -39,4 +46,15 @@ if [ "$INCLUDESETUPTOOLS" = "True" ]; then
   virtualenv -q --clear --prompt "${VENVPROMPT}" "${VENVLOCATION}"
 else
   virtualenv -q --clear --no-setuptools --prompt "${VENVPROMPT}" "${VENVLOCATION}"
+fi
+
+source "$VENVLOCATION/bin/activate"
+echo -e "(i) Activated virtualenv $VENVLOCATION."
+echo -e "(i) $(which python3) $(python3 --version)"
+
+if [ "$REQUIREMENTSFILE" != "" ]; then
+  echo -e "(i) Installing requirements from $REQUIREMENTSFILE."
+  pip install -r "$REQUIREMENTSFILE"
+else
+  echo -e "(i) No requirements file specified."
 fi

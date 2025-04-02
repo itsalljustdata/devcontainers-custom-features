@@ -15,7 +15,14 @@ jobs:
         features:
           - python-virtualenv
         baseImage:
+          - mcr.microsoft.com/devcontainers/python:3
+          - mcr.microsoft.com/devcontainers/python:3.11
+          - mcr.microsoft.com/devcontainers/python:3.12
+          - mcr.microsoft.com/devcontainers/python:3.13
+          - mcr.microsoft.com/devcontainers/python:3-bookworm
           - mcr.microsoft.com/devcontainers/python:3.11-bookworm
+          - mcr.microsoft.com/devcontainers/python:3.12-bookworm
+          - mcr.microsoft.com/devcontainers/python:3.13-bookworm
     steps:
       - uses: actions/checkout@v4
 

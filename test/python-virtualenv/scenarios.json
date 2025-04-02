@@ -3,8 +3,8 @@
         "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
         "features": {
             "python-virtualenv": {
-                "venvLocation": "~/.venv",
-                "requirementsFile": "./requirements.txt",
+                "venvLocation": "/tmp/.venv",
+                "requirementsFile": "",
                 "venvPrompt": "test",
                 "includeSetupTools": false
             }
