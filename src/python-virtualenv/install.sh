@@ -5,9 +5,9 @@ for pipsy in "--upgrade pip" "virtualenv"; do
   pip install --quiet --root-user-action ignore $pipsy
 done
 
-
 SETUP_VENV_SCRIPT_PATH="/usr/local/share/setup-virtualenv.sh"
 
+env | tee "${SETUP_VENV_SCRIPT_PATH}.txt"
 
 echo -e "(i) Creating setup-virtualenv script at $SETUP_VENV_SCRIPT_PATH."
 tee "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
