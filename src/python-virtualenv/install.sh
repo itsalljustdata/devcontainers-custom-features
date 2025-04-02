@@ -8,6 +8,17 @@ done
 
 SETUP_VENV_SCRIPT_PATH="/usr/local/share/setup-virtualenv.sh"
 
+
+if [ -z $VENVLOCATION ]; then
+  echo -e "(!) No VirtualEnv location specified."
+  VENVLOCATION=${containerWorkspaceFolder}/.venv
+fi
+
+if [ -z $REQUIREMENTSFILE ]; then
+  echo -e "(!) No requirements file specified."
+  REQUIREMENTSFILE=${containerWorkspaceFolder}/requirements.txt
+fi
+
 echo -e "(i) Creating setup-virtualenv script at $SETUP_VENV_SCRIPT_PATH."
 tee "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << EOF
@@ -17,8 +28,8 @@ set -ex
 
 VENV_LOCATION='${VENVLOCATION}'
 REQUIREMENTS_FILE='${REQUIREMENTSFILE}'
-VENV_PROMPT='${VENVPROMPT}'
 INCLUDE_SETUPTOOLS=${INCLUDESETUPTOOLS}
+
 
 EOF
 
@@ -52,9 +63,9 @@ elif [ -d "$VENV_LOCATION" ]; then
 fi
 
 if [ "$INCLUDE_SETUPTOOLS" = "True" ]; then
-  virtualenv -q --clear --prompt "${VENV_PROMPT}" "${VENV_LOCATION}"
+  virtualenv -q --clear "${VENV_LOCATION}"
 else
-  virtualenv -q --clear --no-setuptools --prompt "${VENV_PROMPT}" "${VENV_LOCATION}"
+  virtualenv -q --clear --no-setuptools "${VENV_LOCATION}"
 fi
 
 echo -e "(i) Activating virtualenv $VENV_LOCATION."
@@ -71,26 +82,23 @@ else
   echo -e "(i) No requirements file specified."
 fi
 
-
-proFiles=( "$HOME/.bash_profile" "$HOME/.zprofile" "$HOME/.profile" )
+proFiles=( "$HOME/.bash_profile" "$HOME/.bashrc" "$HOME/.zprofile" "$HOME/.profile" )
 for proFile in "${proFiles[@]}"; do
+
   if [ -f "$proFile" ]; then
     echo -e "(i) Found profile file $proFile."
-  else
-    continue
+    if grep -q "$ACTIVATE_PATH" "$proFile"; then
+      echo -e "(!) venv activation already in $proFile. Skipping."
+      continue
   fi
 
-  if grep -q "$ACTIVATE_PATH" "$proFile"; then
-    echo -e "(!) VIRTUAL_ENV already set in $proFile. Skipping."
-  else
-    echo -e "(i) VIRTUAL_ENV not set in $proFile. Adding it."
-    echo "source "$ACTIVATE_PATH"" >> "$proFile"
-  fi
+  echo -e "(i) venv activation not in $proFile. Adding it."
+  echo "source "$ACTIVATE_PATH"" | tee -a "$proFile" > /dev/null 2>&1
+
 done
 
 EOF
 
 chmod 755 "$SETUP_VENV_SCRIPT_PATH"
 
-ls -l "$SETUP_VENV_SCRIPT_PATH"
 

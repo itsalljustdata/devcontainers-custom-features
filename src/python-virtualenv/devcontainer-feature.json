@@ -1,23 +1,18 @@
 {
   "name": "Python Virtualenv",
   "id": "python-virtualenv",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A feature to install create and configure a Python virtualenv.",
   "options": {
     "venvLocation": {
       "type": "string",
-      "default": ".venv",
-      "description": "The fully qualified location of the virtualenv to create."
+      "default": "",
+      "description": "The fully qualified location of the virtualenv to create. Will default to ${containerWorkspaceFolder}/.venv file if not set."
     },
     "requirementsFile": {
       "type": "string",
       "default": "",
-      "description": "A fully-qualified path to a requirements.txt file inside the container which will be installed."
-    },
-    "venvPrompt": {
-      "type": "string",
-      "default": "",
-      "description": "The prompt to use for the virtualenv. If not set, the default prompt will be used."
+      "description": "A fully-qualified path to a requirements.txt file inside the container which will be installed. Will default to ${containerWorkspaceFolder}/requirements.txt file if not set."
     },
     "includeSetupTools": {
       "type": "boolean",
