@@ -9,16 +9,6 @@ done
 SETUP_VENV_SCRIPT_PATH="/usr/local/share/setup-virtualenv.sh"
 
 
-if [ -z $VENVLOCATION ]; then
-  echo -e "(!) No VirtualEnv location specified."
-  VENVLOCATION=${containerWorkspaceFolder}/.venv
-fi
-
-if [ -z $REQUIREMENTSFILE ]; then
-  echo -e "(!) No requirements file specified."
-  REQUIREMENTSFILE=${containerWorkspaceFolder}/requirements.txt
-fi
-
 echo -e "(i) Creating setup-virtualenv script at $SETUP_VENV_SCRIPT_PATH."
 tee "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << EOF
@@ -30,18 +20,25 @@ VENV_LOCATION='${VENVLOCATION}'
 REQUIREMENTS_FILE='${REQUIREMENTSFILE}'
 INCLUDE_SETUPTOOLS=${INCLUDESETUPTOOLS}
 
-
 EOF
 
 tee -a "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << 'EOF'
 
+if [ -z $VENV_LOCATION ]; then
+  echo -e "(!) No VirtualEnv location specified."
+  VENV_LOCATION=${containerWorkspaceFolder}/.venv
+fi
+
+if [ -z $REQUIREMENTS_FILE ]; then
+  echo -e "(!) No requirements file specified."
+  REQUIREMENTS_FILE=${containerWorkspaceFolder}/requirements.txt
+fi
+
 parentdir=$(dirname "$VENV_LOCATION")
 echo -e "(i) Parent directory is $parentdir."
 
-if [ -z $REQUIREMENTS_FILE ]; then
-  echo -e "(!) No requirements file specified. Continuing without it."
-elif [ ! -f "$REQUIREMENTS_FILE" ]; then
+if [ ! -f "$REQUIREMENTS_FILE" ]; then
   echo -e "(!) Requirements file '$REQUIREMENTS_FILE' not found."
   requirementsdir=$(dirname "$REQUIREMENTS_FILE")
   if [ ! -d "$requirementsdir" ]; then
@@ -70,7 +67,6 @@ fi
 
 echo -e "(i) Activating virtualenv $VENV_LOCATION."
 ACTIVATE_PATH="$(realpath "$VENV_LOCATION")/bin/activate"
-ls -l "${ACTIVATE_PATH}"
 source "${ACTIVATE_PATH}"
 echo -e "(i) Activated virtualenv $VENV_LOCATION."
 echo -e "(i) $(which python3) $(python3 --version)"
