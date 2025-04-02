@@ -42,7 +42,6 @@ source dev-container-features-test-lib
 # check <LABEL> <cmd> [args...]
 
 check "this File" echo "$0"
-
 check "venv location" echo "VENVLOCATION : $VENVLOCATION"
 
 if [ "$VENVLOCATION" == "$VENVLOCATION" ]; then
@@ -55,18 +54,13 @@ if [ "$VENVLOCATION" == "" ]; then
     echo -e "(!) No VirtualEnv location specified."
 else
     check "venv location" echo "VENVLOCATION : $VENVLOCATION"
-
     check "python" which python3
     check "python is available" python3 --version
-
     check "activate venv" source ${VENVLOCATION}/bin/activate
     check "VIRTUAL_ENV" echo $VIRTUAL_ENV
-
     check "python" which python3
     check "python is available" python3 --version
-
     check "pip list" pip list
-
 fi
 
 
