@@ -71,10 +71,26 @@ else
   echo -e "(i) No requirements file specified."
 fi
 
+
+proFiles=( "$HOME/.bash_profile" "$HOME/.zprofile" "$HOME/.profile" )
+for proFile in "${proFiles[@]}"; do
+  if [ -f "$proFile" ]; then
+    echo -e "(i) Found profile file $proFile."
+  else
+    continue
+  fi
+
+  if grep -q "$ACTIVATE_PATH" "$proFile"; then
+    echo -e "(!) VIRTUAL_ENV already set in $proFile. Skipping."
+  else
+    echo -e "(i) VIRTUAL_ENV not set in $proFile. Adding it."
+    echo "source "$ACTIVATE_PATH"" >> "$proFile"
+  fi
+done
+
 EOF
 
 chmod 755 "$SETUP_VENV_SCRIPT_PATH"
 
 ls -l "$SETUP_VENV_SCRIPT_PATH"
 
-cat "$SETUP_VENV_SCRIPT_PATH"
