@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "itsalljustdata",
+      "name": "Jonathan Mills",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40585882?v=4",
+      "profile": "https://github.com/itsalljustdata",
+      "contributions": [
+        "code",
+        "infra",
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "devcontainers-custom-features",
+  "projectOwner": "itsalljustdata"
+}

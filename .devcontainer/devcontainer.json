@@ -1,0 +1,25 @@
+{
+  "name": "devcontainer-features",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/powershell:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers-contrib/features/devcontainers-cli:1": {},
+    "ghcr.io/trunk-io/devcontainer-feature/trunk": "latest",
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.powershell",
+        "streetsidesoftware.code-spell-checker",
+        "trunk.io",
+        "KnisterPeter.vscode-commitizen",
+      ],
+    },
+  },
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
+  ],
+  "updateContentCommand": "trunk install && trunk git-hooks sync",
+}

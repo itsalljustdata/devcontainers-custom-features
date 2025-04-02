@@ -1,0 +1,31 @@
+{
+  "name": "Python Virtualenv",
+  "id": "python-virtualenv",
+  "version": "1.0.0",
+  "description": "A feature to install create and configure a Python virtualenv.",
+  "options": {
+    "venvLocation": {
+      "type": "string",
+      "default": ".venv",
+      "description": "The fully qualified location of the virtualenv to create."
+    },
+    "requirementsFile": {
+      "type": "string",
+      "default": "",
+      "description": "A fully-qualified path to a requirements.txt file inside the container which will be installed."
+    },
+    "venvPrompt": {
+      "type": "string",
+      "default": "",
+      "description": "The prompt to use for the virtualenv. If not set, the default prompt will be used."
+    },
+    "includeSetupTools": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to include setuptools in the virtualenv."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/python"
+  ]
+}
