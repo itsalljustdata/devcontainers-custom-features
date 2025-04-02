@@ -27,6 +27,7 @@ tee -a "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 
 # env | tee "$HOME/$(basename $0).txt"
 
+
 if [ -z $VENV_LOCATION ]; then
   echo -e "(!) No VirtualEnv location specified."
   VENV_LOCATION=${PWD}/.venv
@@ -90,6 +91,7 @@ for proFile in "${proFiles[@]}"; do
     if grep -q "$ACTIVATE_PATH" "$proFile"; then
       echo -e "(!) venv activation already in $proFile. Skipping."
       continue
+    fi
   fi
 
   echo -e "(i) venv activation not in $proFile. Adding it."
