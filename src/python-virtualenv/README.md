@@ -1,7 +1,7 @@
 
-# Python Virtual Env (python-virtualenv)
+# Python Virtualenv (python-virtualenv)
 
-A feature to install create a Python virtualenv
+A feature to install create and configure a Python virtualenv.
 
 ## Example Usage
 
@@ -15,16 +15,23 @@ A feature to install create a Python virtualenv
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
-| venvLocation | The fully qualified location of the virtualenv to create. | string | ~/.venv |
-| requirementsFile | A fully-qualified path to a requirements.txt file inside the container which will be installed for every Python version. | string | - |
+| venvLocation | The fully qualified location of the virtualenv to create. | string | .venv |
+| requirementsFile | A fully-qualified path to a requirements.txt file inside the container which will be installed. | string | - |
 | venvPrompt | The prompt to use for the virtualenv. If not set, the default prompt will be used. | string | - |
-| includeSetupTools | Whether to include setuptools in the virtualenv | boolean | False |
+| includeSetupTools | Whether to include setuptools in the virtualenv. | boolean | false |
 
-# About this Feature
+<!-- markdownlint-disable MD041 -->
 
-# Notes
+## About this Feature
 
-# Credits
+This feature is designed to create a Python virtualenv
+
+## Notes
+
+
+
+## Credits
+
 
 ## Supported Linux Versions
 
@@ -34,4 +41,3 @@ This feature is tested and supported on Debian and Ubuntu-based development cont
 ---
 
 _Note: This file was auto-generated from the [devcontainer-feature.json](https://github.com/itsalljustdata/devcontainers-custom-features/blob/main/src/python-virtualenv/devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
-
