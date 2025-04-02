@@ -1,0 +1,49 @@
+name: Update Contributors
+
+on:
+  push:
+    paths:
+      - ".all-contributorsrc" # Trigger only when .all-contributorsrc is modified
+
+jobs:
+  update-contributors:
+    name: Generate and Update Contributors
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install all-contributors-cli
+      - name: Install all-contributors-cli
+        run: npm install -g all-contributors-cli
+
+      # Step 4: Generate the updated README.md
+      - name: Generate Contributors Section
+        run: npx all-contributors-cli generate
+
+      # Step 5: Commit and push changes
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: update contributors [skip ci]" || echo "No changes to commit"
+          git push origin HEAD
+
+      # Step 6: Create a Pull Request
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "docs: update contributors [skip ci]"
+          branch: update-contributors
+          title: "Update Contributors"
+          body: |
+            This PR updates the contributors section in the README.md file based on the latest .all-contributorsrc file.
