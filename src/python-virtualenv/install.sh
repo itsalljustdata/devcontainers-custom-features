@@ -17,29 +17,23 @@ fi
 parentdir=$(dirname "$VENVLOCATION")
 echo -e "(i) Parent directory is $parentdir."
 
-
-
-VENVLOCATION=$(realpath "$VENVLOCATION")
-
 pip install --upgrade pip
 
 if [ "$REQUIREMENTSFILE" == "" ]; then
   echo -e "(!) No requirements file specified. Continuing without it."
 elif [ ! -f "$REQUIREMENTSFILE" ]; then
   echo -e "(!) Requirements file $REQUIREMENTSFILE not found."
-  exit 1
-fi
-
-if [ -d "$VENVLOCATION" ]; then
-  echo -e "(!) VirtualEnv location $VENVLOCATION already exists. Deleting..."
-  rm -Rf "$VENVLOCATION"
-  echo -e "(i) Deleted $VENVLOCATION."
+  touch "$REQUIREMENTSFILE"
 fi
 
 if [ ! -d "$parentdir" ]; then
   echo -e "(i) Creating parent directory $parentdir."
   mkdir -p "$parentdir"
   echo -e "(i) Created $parentdir."
+elif [ -d "$VENVLOCATION" ]; then
+  echo -e "(!) VirtualEnv location $VENVLOCATION already exists. Deleting..."
+  rm -Rf "$VENVLOCATION"
+  echo -e "(i) Deleted $VENVLOCATION."
 fi
 
 if [ "$INCLUDESETUPTOOLS" = "True" ]; then

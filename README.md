@@ -17,7 +17,7 @@ This repository contains a collection of features for [Development Containers](h
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/itsalljustdata"><img src="https://avatars.githubusercontent.com/u/40585882?v=4" width="100px;" alt="Jonathan Mills"/><br /><sub><b>Jonathan Millsr</b></sub></a><br /><a href="https://github.com/itsalljustdata/devcontainers-custom-features/commits?author=itsalljustdata" title="Code">💻</a> <a href="#infra-itsalljustdata" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/itsalljustdata/devcontainers-custom-features/commits?author=itsalljustdata" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/itsalljustdata"><img src="https://avatars.githubusercontent.com/u/40585882?v=4" width="100px;" alt="Jonathan Mills"/><br /><sub><b>Jonathan Mills</b></sub></a><br /><a href="https://github.com/itsalljustdata/devcontainers-custom-features/commits?author=itsalljustdata" title="Code">💻</a> <a href="#infra-itsalljustdata" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/itsalljustdata/devcontainers-custom-features/commits?author=itsalljustdata" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
