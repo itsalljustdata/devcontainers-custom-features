@@ -25,9 +25,6 @@ EOF
 tee -a "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << 'EOF'
 
-# env | tee "$HOME/$(basename $0).txt"
-
-
 if [ -z $VENV_LOCATION ]; then
   echo -e "(!) No VirtualEnv location specified."
   VENV_LOCATION=${PWD}/.venv
