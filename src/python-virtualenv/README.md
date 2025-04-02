@@ -15,9 +15,8 @@ A feature to install create and configure a Python virtualenv.
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
-| venvLocation | The fully qualified location of the virtualenv to create. | string | .venv |
-| requirementsFile | A fully-qualified path to a requirements.txt file inside the container which will be installed. | string | - |
-| venvPrompt | The prompt to use for the virtualenv. If not set, the default prompt will be used. | string | - |
+| venvLocation | The fully qualified location of the virtualenv to create. Will default to ${containerWorkspaceFolder}/.venv file if not set. | string | - |
+| requirementsFile | A fully-qualified path to a requirements.txt file inside the container which will be installed. Will default to ${containerWorkspaceFolder}/requirements.txt file if not set. | string | - |
 | includeSetupTools | Whether to include setuptools in the virtualenv. | boolean | false |
 
 <!-- markdownlint-disable MD041 -->
