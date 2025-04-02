@@ -25,6 +25,7 @@
       "description": "Whether to include setuptools in the virtualenv."
     }
   },
+  "postCreateCommand": "/usr/local/share/setup-virtualenv.sh",
   "installsAfter": [
     "ghcr.io/devcontainers/features/python"
   ]
