@@ -16,6 +16,17 @@
         "infra",
         "doc"
       ]
+    },
+    {
+      "login": "JonMills-MRWA",
+      "name": "Jonathan Mills",
+      "avatar_url": "https://avatars.githubusercontent.com/u/127457028?v=4",
+      "profile": "https://github.com/JonMills-MRWA",
+      "contributions": [
+        "code",
+        "infra",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

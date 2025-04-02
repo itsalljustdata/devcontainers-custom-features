@@ -25,16 +25,18 @@ EOF
 tee -a "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << 'EOF'
 
-env | tee "$HOME/$(basename $0).txt"
+# env | tee "$HOME/$(basename $0).txt"
 
 if [ -z $VENV_LOCATION ]; then
   echo -e "(!) No VirtualEnv location specified."
-  VENV_LOCATION=${containerWorkspaceFolder}/.venv
+  VENV_LOCATION=${PWD}/.venv
+  echo -e "(!) Using default location '$VENV_LOCATION'."
 fi
 
 if [ -z $REQUIREMENTS_FILE ]; then
   echo -e "(!) No requirements file specified."
-  REQUIREMENTS_FILE=${containerWorkspaceFolder}/requirements.txt
+  REQUIREMENTS_FILE=${PWD}/requirements.txt
+  echo -e "(!) Using default location '$REQUIREMENTS_FILE'."
 fi
 
 parentdir=$(dirname "$VENV_LOCATION")
