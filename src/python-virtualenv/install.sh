@@ -14,7 +14,7 @@ tee "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << EOF
 #!/bin/bash
 
-set -ex
+set -e
 
 VENV_LOCATION='${VENVLOCATION}'
 REQUIREMENTS_FILE='${REQUIREMENTSFILE}'
@@ -35,23 +35,28 @@ if [ -z $VENV_LOCATION ]; then
 fi
 
 if [ -z $REQUIREMENTS_FILE ]; then
+  reqSpecified=0
   echo -e "(!) No requirements file specified."
   REQUIREMENTS_FILE=${PWD}/requirements.txt
   echo -e "(!) Using default location '$REQUIREMENTS_FILE'."
+else
+  reqSpecified=1
 fi
 
 parentdir=$(dirname "$VENV_LOCATION")
 echo -e "(i) Parent directory is $parentdir."
 
-if [ ! -f "$REQUIREMENTS_FILE" ]; then
-  echo -e "(!) Requirements file '$REQUIREMENTS_FILE' not found."
-  requirementsdir=$(dirname "$REQUIREMENTS_FILE")
-  if [ ! -d "$requirementsdir" ]; then
-    echo -e "(i) Creating directory '$requirementsdir'."
-    mkdir -p "$requirementsdir"
-    echo -e "(i) Created '$requirementsdir'."
+if [ $reqSpecified -eq 1 ]; then
+  if [ ! -f "$REQUIREMENTS_FILE" ]; then
+    echo -e "(!) Requirements file '$REQUIREMENTS_FILE' not found."
+    requirementsdir=$(dirname "$REQUIREMENTS_FILE")
+    if [ ! -d "$requirementsdir" ]; then
+      echo -e "(i) Creating directory '$requirementsdir'."
+      mkdir -p "$requirementsdir"
+      echo -e "(i) Created '$requirementsdir'."
+    fi
+    touch "$REQUIREMENTS_FILE"
   fi
-  touch "$REQUIREMENTS_FILE"
 fi
 
 if [ ! -d "$parentdir" ]; then
@@ -76,9 +81,9 @@ source "${ACTIVATE_PATH}"
 echo -e "(i) Activated virtualenv $VENV_LOCATION."
 echo -e "(i) $(which python3) $(python3 --version)"
 
-if [ ! -z $REQUIREMENTS_FILE ]; then
+if [ -f $REQUIREMENTS_FILE ]; then
   echo -e "(i) Installing requirements from $REQUIREMENTS_FILE."
-  pip install -r "$REQUIREMENTS_FILE"
+  pip install --quiet -r "$REQUIREMENTS_FILE"
 else
   echo -e "(i) No requirements file specified."
 fi
