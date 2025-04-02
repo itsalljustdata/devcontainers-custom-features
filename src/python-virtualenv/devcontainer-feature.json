@@ -1,7 +1,7 @@
 {
   "name": "Python Virtualenv",
   "id": "python-virtualenv",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A feature to install create and configure a Python virtualenv.",
   "options": {
     "venvLocation": {
