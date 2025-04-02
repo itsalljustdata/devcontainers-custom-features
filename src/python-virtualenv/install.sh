@@ -16,8 +16,6 @@ tee "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 
 set -ex
 
-env | tee "~/$(basename $0).txt"
-
 VENV_LOCATION='${VENVLOCATION}'
 REQUIREMENTS_FILE='${REQUIREMENTSFILE}'
 INCLUDE_SETUPTOOLS=${INCLUDESETUPTOOLS}
@@ -26,6 +24,8 @@ EOF
 
 tee -a "$SETUP_VENV_SCRIPT_PATH" > /dev/null \
 << 'EOF'
+
+env | tee "$HOME/$(basename $0).txt"
 
 if [ -z $VENV_LOCATION ]; then
   echo -e "(!) No VirtualEnv location specified."
