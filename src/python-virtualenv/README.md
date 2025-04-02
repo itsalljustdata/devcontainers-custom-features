@@ -7,7 +7,7 @@ A feature to install create and configure a Python virtualenv.
 
 ```json
 "features": {
-    "ghcr.io/itsalljustdata/devcontainers-custom-features/python-virtualenv:1": {}
+    "ghcr.io/itsalljustdata/devcontainers-custom-features/python-virtualenv:0": {}
 }
 ```
 
