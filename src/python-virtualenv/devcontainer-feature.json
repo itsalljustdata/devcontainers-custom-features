@@ -21,7 +21,5 @@
     }
   },
   "postCreateCommand": "/usr/local/share/setup-virtualenv.sh",
-  "installsAfter": [
-    "ghcr.io/devcontainers/features/python"
-  ]
+  "installsAfter": ["ghcr.io/devcontainers/features/python"]
 }
