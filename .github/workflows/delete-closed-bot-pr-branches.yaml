@@ -1,0 +1,58 @@
+name: Delete Closed PR Branches
+
+on:
+  schedule:
+    # Run daily at midnight
+    - cron: "0 0 * * *"
+  workflow_dispatch: # Allow manual triggering of the workflow
+
+jobs:
+  delete-branches:
+    name: Delete Closed PR Branches
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_BOT: github-actions[bot] # Define GITHUB_BOT at the job level
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Set GITHUB_TOKEN at the job level
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Install GitHub CLI
+      - name: Install GitHub CLI
+        run: |
+          echo "Installing GitHub CLI..."
+          sudo apt-get update
+          sudo apt-get install -y gh jq
+
+      # Authenticate GitHub CLI
+      - name: Authenticate GitHub CLI
+        run: gh auth login --with-token <<< "${{ env.GITHUB_TOKEN }}"
+
+      # Delete branches associated with closed PRs older than 30 days
+      - name: Delete Closed PR Branches
+        run: |
+          # List all closed PRs
+          gh pr list --state closed --json number,headRefName,closedAt,author | jq -c '.[]' | while read pr; do
+            branch=$(echo "$pr" | jq -r '.headRefName')
+            closedAt=$(echo "$pr" | jq -r '.closedAt')
+            author=$(echo "$pr" | jq -r '.author.login')
+
+            # Check if the branch was created by github-actions[bot]
+            if [ "$author" = "${{ env.GITHUB_BOT }}" ]; then
+              closedAtEpoch=$(date -d "$closedAt" +%s)
+              nowEpoch=$(date +%s)
+              age=$(( (nowEpoch - closedAtEpoch) / 86400 ))
+
+              # Delete the branch if it is older than 30 days
+              if [ $age -gt 30 ]; then
+                echo "Deleting branch: $branch (closed $age days ago)"
+                git push origin --delete "$branch" || echo "Failed to delete branch: $branch"
+              else
+                echo "Skipping branch: $branch (closed $age days ago)"
+              fi
+            else
+              echo "Skipping branch: $branch (created by $author)"
+            fi
+          done
