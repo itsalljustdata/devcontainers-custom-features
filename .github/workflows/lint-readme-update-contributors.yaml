@@ -1,17 +1,21 @@
 name: Update Contributors
 
 on:
-  push:
-    paths:
-      - ".all-contributorsrc" # Trigger only when .all-contributorsrc is modified
-      - "README.md" # Trigger only when README.md is modified
+  push: # Trigger on push events
+    branches:
+      - main # Only run on the main branch
+
+env:
+  GITHUB_BOT: github-actions[bot] # Define GITHUB_BOT at the workflow level
 
 jobs:
-  update-contributors:
-    name: Generate and Update Contributors
+  lint-and-update:
+    name: Lint Files, Generate and Update Contributors
+    if: ${{ github.actor != env.GITHUB_BOT }} # Skip the job if triggered by the bot
     runs-on: ubuntu-latest
 
     steps:
+
       # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -24,11 +28,16 @@ jobs:
 
       # Install packages
       - name: Install Dependencies
-        run: npm install -g all-contributors-cli markdownlint-cli
+        run: npm install -g all-contributors-cli markdownlint-cli prettier
 
       # Lint README.md
       - name: Lint README.md
-        run: markdownlint --fix README.md
+        run: markdownlint --ignore-path ./.prettierignore --fix **/*.md
+        continue-on-error: true # Continue even if linting fails
+
+      # prettier
+      - name: Prettier all files
+        run: prettier --write .
         continue-on-error: true # Continue even if linting fails
 
       # Generate the updated README.md
@@ -38,18 +47,16 @@ jobs:
       # Commit and push changes
       - name: Commit and Push Changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "docs: update contributors [skip ci]" || echo "No changes to commit"
-          git push origin HEAD
-
-      # Create a Pull Request
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "docs: update contributors [skip ci]"
-          branch: update-contributors
-          title: "Update Contributors"
-          body: |
-            This PR updates the contributors section in the README.md file based on the latest .all-contributorsrc file.
+          git config --global user.name "${{ env.GITHUB_BOT }}"
+          git config --global user.email "${{ env.GITHUB_BOT }}@users.noreply.github.com"
+          git config pull.rebase false
+          branch=automated-linting-update-$GITHUB_RUN_ID
+          git checkout -b $branch
+          message='Automated linting update'
+          git add -A # Stages all changed files
+          git commit -m "docs: linting & update contributors [skip ci]"  || export NO_UPDATES=true
+          # Push
+          if [ "$NO_UPDATES" != "true" ] ; then
+              git push origin "$branch"
+              gh pr create --title "$message" --body "$message"
+          fi

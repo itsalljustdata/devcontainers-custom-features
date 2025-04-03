@@ -2,6 +2,9 @@ name: "Release dev container features & Generate Documentation"
 on:
   workflow_dispatch:
 
+env:
+  GITHUB_BOT: github-actions[bot] # Define GITHUB_BOT at the workflow level
+
 jobs:
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -15,7 +18,7 @@ jobs:
           publish-features: "true"
           base-path-to-features: "./src"
           generate-docs: "true"
-          
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,8 +30,8 @@ jobs:
           set -e
           echo "Start."
           # Configure git and Push updates
-          git config --global user.email github-actions@github.com
-          git config --global user.name github-actions
+          git config --global user.name "${{ env.GITHUB_BOT }}"
+          git config --global user.email "${{ env.GITHUB_BOT }}@users.noreply.github.com"
           git config pull.rebase false
           branch=automated-documentation-update-$GITHUB_RUN_ID
           git checkout -b $branch
