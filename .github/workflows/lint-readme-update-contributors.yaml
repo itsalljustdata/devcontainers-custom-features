@@ -1,4 +1,4 @@
-name: Update Contributors
+name: Lint Files, Generate and Update Contributors
 
 on:
   push: # Trigger on push events
