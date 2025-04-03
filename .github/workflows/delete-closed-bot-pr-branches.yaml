@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_BOT: github-actions[bot] # Define GITHUB_BOT at the job level
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Set GITHUB_TOKEN at the job level
 
     steps:
       # Checkout the repository
@@ -28,7 +27,8 @@ jobs:
 
       # Authenticate GitHub CLI
       - name: Authenticate GitHub CLI
-        run: gh auth login --with-token <<< "${{ env.GITHUB_TOKEN }}"
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       # Delete branches associated with closed PRs older than 30 days
       - name: Delete Closed PR Branches
