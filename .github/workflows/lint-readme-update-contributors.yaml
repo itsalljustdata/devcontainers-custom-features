@@ -53,6 +53,8 @@ jobs:
 
       # Commit and push changes
       - name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "${{ env.GITHUB_BOT }}"
           git config --global user.email "${{ env.GITHUB_BOT }}@users.noreply.github.com"
