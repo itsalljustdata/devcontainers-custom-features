@@ -3,7 +3,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "src/**"
+      - "test/**"
   pull_request:
+    paths:
+      - "src/**"
+      - "test/**"
   workflow_dispatch:
 
 jobs:
@@ -23,6 +29,7 @@ jobs:
           - mcr.microsoft.com/devcontainers/python:3.11-bookworm
           - mcr.microsoft.com/devcontainers/python:3.12-bookworm
           - mcr.microsoft.com/devcontainers/python:3.13-bookworm
+          - mcr.microsoft.com/devcontainers/python:latest
     steps:
       - uses: actions/checkout@v4
 
