@@ -2,12 +2,13 @@
 
 [![All Contributors](https://img.shields.io/github/all-contributors/itsalljustdata/devcontainers-custom-features?color=ee8449&style=flat-square)](#contributors)
 
+
 ## Contents
+
 
 This repository contains a collection of features for [Development Containers](https://containers.dev). Click on the link for documentation of each feature.
 
 ### [Python VirtualEnv](src/python-virtualenv/README.md)
-
 
 ## Contributors
 
@@ -28,8 +29,10 @@ This repository contains a collection of features for [Development Containers](h
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+<!-- markdownlint-disable -->
 <small>This project follows the [all-contributors](https://allcontributors.org) specification.
 Contributions of any kind are welcome! </small>
+<!-- markdownlint-restore -->
 
 ## License
 

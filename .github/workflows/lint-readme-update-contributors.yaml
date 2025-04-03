@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - ".all-contributorsrc" # Trigger only when .all-contributorsrc is modified
+      - "README.md" # Trigger only when README.md is modified
 
 jobs:
   update-contributors:
@@ -11,25 +12,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # Step 3: Install all-contributors-cli
-      - name: Install all-contributors-cli
-        run: npm install -g all-contributors-cli
+      # Install packages
+      - name: Install Dependencies
+        run: npm install -g all-contributors-cli markdownlint-cli
 
-      # Step 4: Generate the updated README.md
+      # Lint README.md
+      - name: Lint README.md
+        run: markdownlint --fix README.md
+        continue-on-error: true # Continue even if linting fails
+
+      # Generate the updated README.md
       - name: Generate Contributors Section
         run: npx all-contributors-cli generate
 
-      # Step 5: Commit and push changes
+      # Commit and push changes
       - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
@@ -38,7 +44,7 @@ jobs:
           git commit -m "docs: update contributors [skip ci]" || echo "No changes to commit"
           git push origin HEAD
 
-      # Step 6: Create a Pull Request
+      # Create a Pull Request
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
