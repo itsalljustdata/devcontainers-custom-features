@@ -28,8 +28,8 @@ This repository contains a collection of features for [Development Containers](h
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://allcontributors.org) specification.
-Contributions of any kind are welcome!
+<small>This project follows the [all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome! </small>
 
 ## License
 
