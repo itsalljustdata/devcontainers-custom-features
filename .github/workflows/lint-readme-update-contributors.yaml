@@ -11,10 +11,18 @@ env:
 jobs:
   lint-and-update:
     name: Lint Files, Generate and Update Contributors
-    if: ${{ github.actor != env.GITHUB_BOT }} # Skip the job if triggered by the bot
     runs-on: ubuntu-latest
 
     steps:
+
+      # Exit early if the workflow was triggered by the bot
+      - name: Check Actor
+        run: |
+          # Cannot use env.GITHUB_BOT in the 'if' condition for the job
+          if [ "${{ github.actor }}" = "${{ env.GITHUB_BOT }}" ]; then
+            echo "Push caused by GitHub Actions bot. Exiting."
+            exit 0
+          fi
 
       # Checkout the repository
       - name: Checkout Repository
