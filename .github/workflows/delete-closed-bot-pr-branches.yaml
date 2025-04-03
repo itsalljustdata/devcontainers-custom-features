@@ -1,4 +1,4 @@
-name: Delete Closed PR Branches
+name: Delete Closed Bot-Created PR Branches
 
 on:
   schedule:
@@ -34,25 +34,35 @@ jobs:
       - name: Delete Closed PR Branches
         run: |
           # List all closed PRs
-          gh pr list --state closed --json number,headRefName,closedAt,author | jq -c '.[]' | while read pr; do
+          gh pr list --state closed --json number,headRefName,closedAt,author,state | jq -c '.[]' | while read pr; do
             branch=$(echo "$pr" | jq -r '.headRefName')
-            closedAt=$(echo "$pr" | jq -r '.closedAt')
-            author=$(echo "$pr" | jq -r '.author.login')
+            echo gh api repos/:owner/:repo/branches/$branch
+            branch_detail=$(gh api repos/:owner/:repo/branches/$branch 2> /dev/null)
+            reqStatus=$(echo "$branch_detail" | jq -r '.status')
+            if [ "$reqStatus" == "404" ]; then
+              # Branch does not exist, already deleted
+              continue
+            fi
 
-            # Check if the branch was created by github-actions[bot]
-            if [ "$author" = "${{ env.GITHUB_BOT }}" ]; then
+            closedAt=$(echo "$pr" | jq -r '.closedAt')
+            authorIsBot=$(echo "$pr" | jq -r '.author.is_bot')
+
+            author=$(echo "$branch_detail" | jq -r '.commit.author.login')
+
+            # Check if the branch was created by a bot
+            if [ "$authorIsBot" == "true" ]; then
               closedAtEpoch=$(date -d "$closedAt" +%s)
               nowEpoch=$(date +%s)
               age=$(( (nowEpoch - closedAtEpoch) / 86400 ))
 
               # Delete the branch if it is older than 30 days
               if [ $age -gt 30 ]; then
-                echo "Deleting branch: $branch (closed $age days ago)"
+                echo "Deleting branch: $branch (closed $age days ago by $author)"
                 git push origin --delete "$branch" || echo "Failed to delete branch: $branch"
               else
-                echo "Skipping branch: $branch (closed $age days ago)"
+                echo "Skipping recent branch: $branch (closed $age days ago by $author)"
               fi
             else
-              echo "Skipping branch: $branch (created by $author)"
+              echo "Skipping Non-Bot branch: $branch (created by $author)"
             fi
           done
