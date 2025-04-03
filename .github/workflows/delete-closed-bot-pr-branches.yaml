@@ -33,14 +33,16 @@ jobs:
       # Delete branches associated with closed PRs older than 30 days
       - name: Delete Closed PR Branches
         run: |
-          # List all closed PRs
-          gh pr list --state closed --json number,headRefName,closedAt,author,state | jq -c '.[]' | while read pr; do
+          gh pr list --state closed --json number,title,headRefName,closedAt,author,state | jq -c 'sort_by(.number)[]' | while read pr; do
+            prNum=$(echo "$pr" | jq -r '.number')
+            prTitle=$(echo "$pr" | jq -r '.title')
+            echo "*****************************************************"
+            echo "Processing PR #$prNum: $prTitle"
             branch=$(echo "$pr" | jq -r '.headRefName')
-            echo gh api repos/:owner/:repo/branches/$branch
-            branch_detail=$(gh api repos/:owner/:repo/branches/$branch 2> /dev/null)
+            branch_detail=$(gh api repos/:owner/:repo/branches/$branch 2> /dev/null || true)
             reqStatus=$(echo "$branch_detail" | jq -r '.status')
-            if [ "$reqStatus" == "404" ]; then
-              # Branch does not exist, already deleted
+            if [[ "$reqStatus" == "404" ]]; then
+              echo "- Branch does not exist, already deleted"
               continue
             fi
 
@@ -57,12 +59,12 @@ jobs:
 
               # Delete the branch if it is older than 30 days
               if [ $age -gt 30 ]; then
-                echo "Deleting branch: $branch (closed $age days ago by $author)"
+                echo "- Deleting branch: $branch (closed $age days ago by $author)"
                 git push origin --delete "$branch" || echo "Failed to delete branch: $branch"
               else
-                echo "Skipping recent branch: $branch (closed $age days ago by $author)"
+                echo "- Skipping recent branch: $branch (closed $age days ago by $author)"
               fi
             else
-              echo "Skipping Non-Bot branch: $branch (created by $author)"
+              echo "- Skipping Non-Bot branch: $branch (created by $author)"
             fi
           done
