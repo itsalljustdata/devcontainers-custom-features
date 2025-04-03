@@ -6,3 +6,6 @@
 
 # Devcontainer CLI will apply its own formatting
 src/**/README.md
+
+# Ignore any GH Actions
+.github/**

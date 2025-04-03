@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       # Exit early if the workflow was triggered by the bot
       - name: Check Actor
         run: |
