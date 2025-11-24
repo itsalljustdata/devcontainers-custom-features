@@ -31,7 +31,7 @@ jobs:
           - mcr.microsoft.com/devcontainers/python:3.13-bookworm
           - mcr.microsoft.com/devcontainers/python:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
@@ -47,7 +47,7 @@ jobs:
         features:
           - python-virtualenv
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
